@@ -14,3 +14,11 @@ variable "public_subnet_block" {
   description = "Public subnet"
 }
 
+variable "region" {
+  description = "Region in which the cluster is placed"
+}
+
+variable "cluster_name" {
+  type = string
+  description = "(optional) describe your variable"
+}
