@@ -11,6 +11,21 @@
 
 ## Steps
 
+- Initialize the Terraform
+```text
+terraform init
+```
+
+- View the planned infrastructure buildout
+```text
+terraform plan -out=tfplan
+```
+
+- Apply the plan
+```text
+terraform apply tfplan
+```
+
 - Run the following command to retrieve the access credentials for your cluster and automatically configure kubectl.
 
 ```text
