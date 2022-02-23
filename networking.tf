@@ -13,6 +13,7 @@ resource "aws_vpc" "eks-vpc" {
   }
 }
 
+# Route tables
 resource "aws_route_table" "eks-rt-public" {
   vpc_id = aws_vpc.eks-vpc.id
 
@@ -26,7 +27,7 @@ resource "aws_route_table" "eks-rt-public" {
   }
 }
 
-resource "aws_route_table" "eks-rt-private" {
+resource "aws_route_table" "eks-rt-private-1" {
   vpc_id = aws_vpc.eks-vpc.id
 
   route {
@@ -35,31 +36,93 @@ resource "aws_route_table" "eks-rt-private" {
   }
 
   tags = {
-    Name = "${var.owner}-eks-rt-private"
+    Name = "${var.owner}-eks-rt-private-${var.region}a"
   }
 }
 
-resource "aws_subnet" "subnet-public" {
-  cidr_block = var.public_subnet_block
+resource "aws_route_table" "eks-rt-private-2" {
+  vpc_id = aws_vpc.eks-vpc.id
+
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.nat.id
+  }
+
+  tags = {
+    Name = "${var.owner}-eks-rt-private-${var.region}c"
+  }
+}
+
+#route table associations
+resource "aws_route_table_association" "public1" {
+  subnet_id      = aws_subnet.subnet-public-1.id
+  route_table_id = aws_route_table.eks-rt-public.id
+}
+
+resource "aws_route_table_association" "public2" {
+  subnet_id      = aws_subnet.subnet-public-2.id
+  route_table_id = aws_route_table.eks-rt-public.id
+}
+
+resource "aws_route_table_association" "private1" {
+  subnet_id      = aws_subnet.subnet-private-1.id
+  route_table_id = aws_route_table.eks-rt-private-1.id
+}
+
+resource "aws_route_table_association" "private2" {
+  subnet_id      = aws_subnet.subnet-private-2.id
+  route_table_id = aws_route_table.eks-rt-private-2.id
+}
+
+#subnets public
+resource "aws_subnet" "subnet-public-1" {
+  cidr_block = "192.168.0.0/19"
   vpc_id = aws_vpc.eks-vpc.id
   availability_zone = "${var.region}a"
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "${var.owner}-eks-public"
+    Name = "${var.owner}-eks-public-${var.region}a"
+    # "kubernetes.io/cluster/${aws_eks_cluster.cluster.name}" = "shared"
+  } 
+}
+
+resource "aws_subnet" "subnet-public-2" {
+  cidr_block = "192.168.32.0/19"
+  vpc_id = aws_vpc.eks-vpc.id
+  availability_zone = "${var.region}c"
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name = "${var.owner}-eks-public-${var.region}c"
+    # "kubernetes.io/cluster/${aws_eks_cluster.cluster.name}" = "shared"
   }
 }
 
-resource "aws_subnet" "subnet-private" {
-  cidr_block = var.private_subnet_block
+#subnets private
+resource "aws_subnet" "subnet-private-1" {
+  cidr_block = "192.168.64.0/19"
+  vpc_id = aws_vpc.eks-vpc.id
+  availability_zone = "${var.region}a"
+
+  tags = {
+    Name = "${var.owner}-eks-private-${var.region}a"
+    # "kubernetes.io/cluster/${aws_eks_cluster.cluster.name}" = "shared"
+  }
+}
+
+resource "aws_subnet" "subnet-private-2" {
+  cidr_block = "192.168.96.0/19"
   vpc_id = aws_vpc.eks-vpc.id
   availability_zone = "${var.region}c"
 
   tags = {
-    Name = "${var.owner}-eks-private"
+    Name = "${var.owner}-eks-private-${var.region}c"
+    # "kubernetes.io/cluster/${aws_eks_cluster.cluster.name}" = "shared"
   }
 }
 
+#internet gateway
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.eks-vpc.id
 
@@ -78,7 +141,11 @@ resource "aws_eip" "eip-nat" {
 
 resource "aws_nat_gateway" "nat" {
   allocation_id = aws_eip.eip-nat.id
-  subnet_id = aws_subnet.subnet-private.id
+  subnet_id = aws_subnet.subnet-private-1.id
+
+  tags = {
+    "Name" = "${var.owner}-eks-nat"
+  }
 }
 
 
@@ -91,6 +158,6 @@ resource "aws_nat_gateway" "nat" {
 #   vpc_id            = aws_vpc.eks-vpc.id
 
 #   tags = {
-#     "kubernetes.io/cluster/${aws_eks_cluster.cluster.name}" = "shared-by-nodes"
+#     "kubernetes.io/cluster/${aws_eks_cluster.cluster.name}" = "shared"
 #   }
 # }

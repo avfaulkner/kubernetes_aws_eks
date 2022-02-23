@@ -33,7 +33,7 @@ resource "aws_iam_role_policy_attachment" "cluster-AmazonEKSVPCResourceControlle
 
 # worker nodes
 resource "aws_iam_role" "nodes" {
-  name = "eks-node-group-example"
+  name = "eks-node-group"
 
   assume_role_policy = jsonencode({
     Statement = [{

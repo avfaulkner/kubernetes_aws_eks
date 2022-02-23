@@ -23,7 +23,7 @@ output "cluster-vpc-config" {
 }
 
 output "cluster_name" {
-  value = var.cluster_name
+  value = "${var.owner}-${var.cluster_name}"
 }
 
 output "region" {
