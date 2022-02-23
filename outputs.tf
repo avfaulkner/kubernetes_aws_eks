@@ -27,5 +27,5 @@ output "cluster_name" {
 }
 
 output "region" {
-  value       = var.region
+  value = var.region
 }

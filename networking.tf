@@ -4,7 +4,7 @@ data "aws_availability_zones" "zones" {
 
 # VPC
 resource "aws_vpc" "eks-vpc" {
-  cidr_block = var.vpc_cidr_block
+  cidr_block           = var.vpc_cidr_block
   enable_dns_support   = true
   enable_dns_hostnames = true
 
@@ -76,21 +76,21 @@ resource "aws_route_table_association" "private2" {
 
 #subnets public
 resource "aws_subnet" "subnet-public-1" {
-  cidr_block = "192.168.0.0/19"
-  vpc_id = aws_vpc.eks-vpc.id
-  availability_zone = "${var.region}a"
+  cidr_block              = "192.168.0.0/19"
+  vpc_id                  = aws_vpc.eks-vpc.id
+  availability_zone       = "${var.region}a"
   map_public_ip_on_launch = true
 
   tags = {
     Name = "${var.owner}-eks-public-${var.region}a"
     # "kubernetes.io/cluster/${aws_eks_cluster.cluster.name}" = "shared"
-  } 
+  }
 }
 
 resource "aws_subnet" "subnet-public-2" {
-  cidr_block = "192.168.32.0/19"
-  vpc_id = aws_vpc.eks-vpc.id
-  availability_zone = "${var.region}c"
+  cidr_block              = "192.168.32.0/19"
+  vpc_id                  = aws_vpc.eks-vpc.id
+  availability_zone       = "${var.region}c"
   map_public_ip_on_launch = true
 
   tags = {
@@ -101,8 +101,8 @@ resource "aws_subnet" "subnet-public-2" {
 
 #subnets private
 resource "aws_subnet" "subnet-private-1" {
-  cidr_block = "192.168.64.0/19"
-  vpc_id = aws_vpc.eks-vpc.id
+  cidr_block        = "192.168.64.0/19"
+  vpc_id            = aws_vpc.eks-vpc.id
   availability_zone = "${var.region}a"
 
   tags = {
@@ -112,8 +112,8 @@ resource "aws_subnet" "subnet-private-1" {
 }
 
 resource "aws_subnet" "subnet-private-2" {
-  cidr_block = "192.168.96.0/19"
-  vpc_id = aws_vpc.eks-vpc.id
+  cidr_block        = "192.168.96.0/19"
+  vpc_id            = aws_vpc.eks-vpc.id
   availability_zone = "${var.region}c"
 
   tags = {
@@ -141,7 +141,7 @@ resource "aws_eip" "eip-nat" {
 
 resource "aws_nat_gateway" "nat" {
   allocation_id = aws_eip.eip-nat.id
-  subnet_id = aws_subnet.subnet-private-1.id
+  subnet_id     = aws_subnet.subnet-private-1.id
 
   tags = {
     "Name" = "${var.owner}-eks-nat"

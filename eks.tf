@@ -5,13 +5,13 @@ resource "aws_eks_cluster" "cluster" {
 
   vpc_config {
     subnet_ids = [
-      aws_subnet.subnet-public-1.id, 
+      aws_subnet.subnet-public-1.id,
       aws_subnet.subnet-private-1.id,
-      aws_subnet.subnet-public-2.id, 
+      aws_subnet.subnet-public-2.id,
       aws_subnet.subnet-private-2.id
     ]
     # endpoint_private_access = true
-    endpoint_public_access  = true
+    endpoint_public_access = true
   }
 
   enabled_cluster_log_types = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
@@ -29,16 +29,16 @@ resource "aws_eks_node_group" "node-group" {
   cluster_name    = aws_eks_cluster.cluster.name
   node_group_name = "${var.owner}-nodes"
   node_role_arn   = aws_iam_role.nodes.arn
-  subnet_ids      = [
+  subnet_ids = [
     # aws_subnet.subnet-private-1.id,
     # aws_subnet.subnet-private-2.id,
     aws_subnet.subnet-public-1.id,
     aws_subnet.subnet-public-2.id
   ]
   instance_types = ["t3.2xlarge"] # 8 vCPU, 32G RAM
-  disk_size = 60
-  ami_type = "AL2_x86_64"
-  capacity_type = "ON_DEMAND"
+  disk_size      = 60
+  ami_type       = "AL2_x86_64"
+  capacity_type  = "ON_DEMAND"
 
   scaling_config {
     desired_size = 2

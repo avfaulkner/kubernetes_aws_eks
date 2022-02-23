@@ -5,7 +5,7 @@ resource "aws_security_group" "control" {
   vpc_id      = aws_vpc.eks-vpc.id
 
   tags = {
-      Name = "${var.owner}-sg-eks-controlplane"
+    Name = "${var.owner}-sg-eks-controlplane"
   }
 }
 
@@ -25,7 +25,7 @@ resource "aws_security_group" "nodes" {
   vpc_id      = aws_vpc.eks-vpc.id
 
   tags = {
-      Name = "${var.owner}-sg-eks-nodes"
+    Name = "${var.owner}-sg-eks-nodes"
   }
 }
 
@@ -39,10 +39,10 @@ resource "aws_security_group_rule" "nodes-out" {
 }
 
 resource "aws_security_group_rule" "nodes-in" {
-  type              = "egress"
-  from_port         = 0
-  to_port           = 65535
-  protocol          = "all"
+  type                     = "egress"
+  from_port                = 0
+  to_port                  = 65535
+  protocol                 = "all"
   source_security_group_id = aws_security_group.control.id
-  security_group_id = aws_security_group.control.id
+  security_group_id        = aws_security_group.control.id
 }
