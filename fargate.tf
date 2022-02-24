@@ -10,7 +10,7 @@ resource "aws_eks_fargate_profile" "cluster" {
   ]
 
   selector {
-    namespace = "trust-center"
+    namespace = var.cluster_name
   }
 }
 
