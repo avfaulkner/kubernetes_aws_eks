@@ -11,6 +11,8 @@
 
 ## Steps
 
+### Note: Currently, if planning to use EC2 instances for nodes only, comment out the code in fargate.tf. If planning to use Fargate and not EC2 instances only, comment out all code under the "worker node group" heading in eks.tf. 
+
 - Initialize the Terraform
 ```text
 terraform init
