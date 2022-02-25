@@ -65,6 +65,6 @@ resource "aws_eks_node_group" "node-group" {
 
   tags = {
     "kubernetes.io/cluster/${aws_eks_cluster.cluster.name}" = "owned"
-    Name = "${var.owner}-eks-nodes"
+    Name = "${var.owner}-eks-${var.cluster_name}-nodes"
   }
 }
