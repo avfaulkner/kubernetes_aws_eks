@@ -1,7 +1,3 @@
-data "aws_availability_zones" "zones" {
-  state = "available"
-}
-
 # VPC
 resource "aws_vpc" "eks-vpc" {
   cidr_block           = var.vpc_cidr_block
@@ -148,6 +144,14 @@ resource "aws_nat_gateway" "nat" {
   }
 }
 
+# In a future version of this code, the subnet resource below will create subnets 
+# dynamically using availability zones (obtained from the data resource below) 
+# that exist within the chosen region. 
+# The chosen region is placed in terraform.tfvars and used in the AWS provider in providers.tf.
+
+# data "aws_availability_zones" "zones" {
+#   state = "available"
+# }
 
 #node group
 # resource "aws_subnet" "nodes" {
