@@ -72,49 +72,45 @@ resource "aws_route_table_association" "private2" {
 
 #subnets public
 resource "aws_subnet" "subnet-public-1" {
-  cidr_block              = "192.168.0.0/19"
+  cidr_block              = var.public_subnet_block_1
   vpc_id                  = aws_vpc.eks-vpc.id
   availability_zone       = "${var.region}a"
   map_public_ip_on_launch = true
 
   tags = {
     Name = "${var.owner}-eks-public-${var.region}a"
-    # "kubernetes.io/cluster/${aws_eks_cluster.cluster.name}" = "shared"
   }
 }
 
 resource "aws_subnet" "subnet-public-2" {
-  cidr_block              = "192.168.32.0/19"
+  cidr_block              = var.public_subnet_block_2
   vpc_id                  = aws_vpc.eks-vpc.id
   availability_zone       = "${var.region}c"
   map_public_ip_on_launch = true
 
   tags = {
     Name = "${var.owner}-eks-public-${var.region}c"
-    # "kubernetes.io/cluster/${aws_eks_cluster.cluster.name}" = "shared"
   }
 }
 
 #subnets private
 resource "aws_subnet" "subnet-private-1" {
-  cidr_block        = "192.168.64.0/19"
+  cidr_block        = var.private_subnet_block_1
   vpc_id            = aws_vpc.eks-vpc.id
   availability_zone = "${var.region}a"
 
   tags = {
     Name = "${var.owner}-eks-private-${var.region}a"
-    # "kubernetes.io/cluster/${aws_eks_cluster.cluster.name}" = "shared"
   }
 }
 
 resource "aws_subnet" "subnet-private-2" {
-  cidr_block        = "192.168.96.0/19"
+  cidr_block        = var.private_subnet_block_2
   vpc_id            = aws_vpc.eks-vpc.id
   availability_zone = "${var.region}c"
 
   tags = {
     Name = "${var.owner}-eks-private-${var.region}c"
-    # "kubernetes.io/cluster/${aws_eks_cluster.cluster.name}" = "shared"
   }
 }
 
