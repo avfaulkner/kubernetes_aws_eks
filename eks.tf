@@ -29,12 +29,7 @@ resource "aws_eks_node_group" "node-group" {
   cluster_name    = aws_eks_cluster.cluster.name
   node_group_name = "${var.owner}-nodes"
   node_role_arn   = aws_iam_role.nodes.arn
-  subnet_ids = [
-    # aws_subnet.subnet-private-1.id,
-    # aws_subnet.subnet-private-2.id,
-    aws_subnet.subnet-public-1.id,
-    aws_subnet.subnet-public-2.id
-  ]
+  subnet_ids = aws_subnet.nodes[*].id
   instance_types = ["t3.2xlarge"] # 8 vCPU, 32G RAM
   disk_size      = 60
   ami_type       = "AL2_x86_64"

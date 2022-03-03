@@ -146,19 +146,19 @@ resource "aws_nat_gateway" "nat" {
 # The chosen region is placed in terraform.tfvars and used in the AWS provider in providers.tf.
 # Dynamic subnets will be useful for node groups that contain multiple EC2 instances.
 
-# data "aws_availability_zones" "zones" {
-#   state = "available"
-# }
+data "aws_availability_zones" "zones" {
+  state = "available"
+}
 
-#node group
-# resource "aws_subnet" "nodes" {
-#   count = 2
+# node group
+resource "aws_subnet" "nodes" {
+  count = length(data.aws_availability_zones.zones.names)
 
-#   availability_zone = data.aws_availability_zones.zones.names[count.index]
-#   cidr_block        = cidrsubnet(aws_vpc.eks-vpc.cidr_block, 8, count.index)
-#   vpc_id            = aws_vpc.eks-vpc.id
+  availability_zone = data.aws_availability_zones.zones.names[count.index]
+  cidr_block        = cidrsubnet(aws_vpc.eks-vpc.cidr_block, 8, count.index)
+  vpc_id            = aws_vpc.eks-vpc.id
 
-#   tags = {
-#     "kubernetes.io/cluster/${aws_eks_cluster.cluster.name}" = "shared"
-#   }
-# }
+  tags = {
+    "kubernetes.io/cluster/${aws_eks_cluster.cluster.name}" = "shared"
+  }
+}

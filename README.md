@@ -51,3 +51,6 @@ kubectl get pods --all-namespaces
 ```text
 kubectl get services --all-namespaces
 ```
+### Notes
+If using EC2 node groups, the code will dynamically place one EC2 instance in each
+availibility zone within the chosen region. 
