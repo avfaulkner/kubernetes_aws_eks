@@ -148,6 +148,7 @@ resource "aws_nat_gateway" "nat" {
 # dynamically using availability zones (obtained from the data resource below) 
 # that exist within the chosen region. 
 # The chosen region is placed in terraform.tfvars and used in the AWS provider in providers.tf.
+# Dynamic subnets will be useful for node groups that contain multiple EC2 instances.
 
 # data "aws_availability_zones" "zones" {
 #   state = "available"
