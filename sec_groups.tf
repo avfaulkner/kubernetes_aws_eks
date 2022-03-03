@@ -39,7 +39,7 @@ resource "aws_security_group_rule" "nodes-out" {
 }
 
 resource "aws_security_group_rule" "nodes-in" {
-  type                     = "egress"
+  type                     = "ingress"
   from_port                = 0
   to_port                  = 65535
   protocol                 = "all"
