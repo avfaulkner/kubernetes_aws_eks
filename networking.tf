@@ -140,9 +140,8 @@ resource "aws_nat_gateway" "nat" {
   }
 }
 
-# The subnet resource below will create subnets 
-# dynamically using availability zones (obtained from the data resource below) 
-# that exist within the chosen region. 
+# The subnet resource below will dynamically create one subnet in each availibility zone (obtained from the data resource below)
+# within the chosen region.
 # The chosen region is placed in terraform.tfvars and used in the AWS provider in providers.tf.
 # Dynamic subnets will be useful for node groups that contain multiple EC2 instances.
 
